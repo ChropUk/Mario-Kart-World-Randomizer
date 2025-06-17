@@ -300,8 +300,13 @@
 
         <button class="add-player-btn" onclick="addPlayer()" id="addPlayerBtn" disabled>+ Add Player</button>
     </div>
+    <audio id="itemBoxSound" src="./sounds/ItemBox.mp3" preload="auto"></audio>
+
 
     <script>
+        const itemBoxSound = document.getElementById('itemBoxSound');
+        itemBoxSound.volume = 0.3; // Volume is a value between 0.0 (silent) and 1.0 (full volume)
+
         // Base characters list (each entry should match the folder name used in Images/Characters/<name>)
         let characterList = ["BabyDaisy", "BabyLuigi", "BabyMario", "BabyPeach", "BabyRosalina", "Birdo", "Bowser", "BowserJr", 
             "Creatures", "Daisy", "DonkeyKong", "KingBoo", "KoopaTroopa", "Lakitu", "Luigi", "Mario", "Pauline", "Peach", 
@@ -621,6 +626,7 @@
 
         function generateAll() {
             if (isGenerating || !assetsLoaded) return;
+            document.getElementById('itemBoxSound').play(); // 🔊 Play sound
 
             isGenerating = true;
             const generateBtn = document.querySelector('.generate-btn');
@@ -645,7 +651,7 @@
                 }
 
                 const finalKart = karts[Math.floor(Math.random() * karts.length)];
-                const duration = 2000 + Math.random() * 1000;
+                const duration = 2800;
 
                 spinSlot(characterSlotId, characters, duration, finalCharacter);
                 spinSlot(kartSlotId, karts, duration, finalKart);
