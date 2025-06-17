@@ -340,7 +340,7 @@
         }
 
         // Function to recursively scan directories for characters
-        async function scanCharacterDirectories(basePath = '/Mario-Kart-World-Randomizer/Images/Characters') {
+        async function scanCharacterDirectories(basePath = './Images/Characters') {
             try {
                 const response = await fetch(basePath);
                 if (!response.ok) {
@@ -384,27 +384,27 @@
             
             try {
                 loadingMessage.textContent = 'Scanning character folders...';
-                characters = await scanCharacterDirectories('/Mario-Kart-World-Randomizer/Images/Characters');
+                characters = await scanCharacterDirectories('./Images/Characters');
                 
                 loadingMessage.textContent = 'Scanning kart folders...';
-                karts = await scanDirectory('/Mario-Kart-World-Randomizer/Images/Karts');
+                karts = await scanDirectory('./Images/Karts');
                 
                 // If no assets found, use fallback data
                 if (characters.length === 0) {
                     console.warn('No characters found, using fallback data');
                     characters = [
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Mario/Mario.png', name: 'Mario'},
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Mario/MarioAllTerrain.png', name: 'Mario All Terrain'},
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Mario/MarioAviator.png', name: 'Mario Aviator'},
+                        {picture: './Images/Characters/Mario/Mario.png', name: 'Mario'},
+                        {picture: './Images/Characters/Mario/MarioAllTerrain.png', name: 'Mario All Terrain'},
+                        {picture: './Images/Characters/Mario/MarioAviator.png', name: 'Mario Aviator'},
                     ];
                 }
                 
                 if (karts.length === 0) {
                     console.warn('No karts found, using fallback data');
                     karts = [
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Karts/StandardKart.png', name: 'Standard Kart'},
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Karts/PipeFrame.png', name: 'Pipe Frame'},
-                        {picture: '/Mario-Kart-World-Randomizer/Images/Karts/Mach8.png', name: 'Mach 8'},
+                        {picture: './Images/Karts/StandardKart.png', name: 'Standard Kart'},
+                        {picture: './Images/Karts/PipeFrame.png', name: 'Pipe Frame'},
+                        {picture: './Images/Karts/Mach8.png', name: 'Mach 8'},
                     ];
                 }
                 
@@ -434,14 +434,14 @@
                 
                 // Use fallback data
                 characters = [
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Mario/Mario.png', name: 'Mario'},
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Luigi/Luigi.png', name: 'Luigi'},
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Characters/Peach/Peach.png', name: 'Peach'},
+                    {picture: './Images/Characters/Mario/Mario.png', name: 'Mario'},
+                    {picture: './Images/Characters/Luigi/Luigi.png', name: 'Luigi'},
+                    {picture: './Images/Characters/Peach/Peach.png', name: 'Peach'},
                 ];
                 karts = [
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Karts/StandardKart.png', name: 'Standard Kart'},
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Karts/PipeFrame.png', name: 'Pipe Frame'},
-                    {picture: '/Mario-Kart-World-Randomizer/Images/Karts/Mach8.png', name: 'Mach 8'},
+                    {picture: './Images/Karts/StandardKart.png', name: 'Standard Kart'},
+                    {picture: './Images/Karts/BabyBlooper.png', name: 'Baby Blooper'},
+                    {picture: './Images/Karts/Mach8.png', name: 'Mach 8'},
                 ];
                 
                 const generateBtn = document.getElementById('generateBtn');
