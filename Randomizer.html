@@ -265,7 +265,12 @@
         <div class="loading-message" id="loadingMessage">
             Loading characters and karts from folders...
         </div>
-
+        <div style="margin-bottom: 1em;">
+            <label>
+                <input type="checkbox" id="trueRandomness" checked>
+                True Randomness
+            </label>
+        </div>
         <button class="generate-btn" onclick="generateAll()" id="generateBtn" disabled>Loading...</button>
 
         <div class="players-container" id="playersContainer">
@@ -297,176 +302,246 @@
     </div>
 
     <script>
-        let characters = [];
-        let karts = [];
+        // Base characters list (each entry should match the folder name used in Images/Characters/<name>)
+        let characterList = ["BabyDaisy", "BabyLuigi", "BabyMario", "BabyPeach", "BabyRosalina", "Birdo", "Bowser", "BowserJr", 
+            "Creatures", "Daisy", "DonkeyKong", "KingBoo", "KoopaTroopa", "Lakitu", "Luigi", "Mario", "Pauline", "Peach", 
+            "Rosalina", "ShyGuy", "Toad", "Toadette", "Waluigi", "Yoshi" 
+        ];
+
+        let characters = [
+            { picture: "./Images/Characters/BabyDaisy/BabyDaisy.png", name: "Baby Daisy" },
+            { picture: "./Images/Characters/BabyDaisy/BabyDaisyExplorer.png", name: "Baby Daisy Explorer" },
+            { picture: "./Images/Characters/BabyDaisy/BabyDaisyRacer.png", name: "Baby Daisy Racer" },
+            { picture: "./Images/Characters/BabyDaisy/BabyDaisySailor.png", name: "Baby Daisy Sailor" },
+            { picture: "./Images/Characters/BabyDaisy/BabyDaisyTouring.png", name: "Baby Daisy Touring" },
+            { picture: "./Images/Characters/BabyLuigi/BabyLuigi.png", name: "Baby Luigi" },
+            { picture: "./Images/Characters/BabyLuigi/BabyLuigiRacer.png", name: "Baby Luigi Racer" },
+            { picture: "./Images/Characters/BabyLuigi/BabyLuigiWorkCrew.png", name: "Baby Luigi Work Crew" },
+            { picture: "./Images/Characters/BabyMario/BabyMario.png", name: "Baby Mario" },
+            { picture: "./Images/Characters/BabyMario/BabyMarioRacer.png", name: "Baby Mario Racer" },
+            { picture: "./Images/Characters/BabyMario/BabyMarioSwimwear.png", name: "Baby Mario Swimwear" },
+            { picture: "./Images/Characters/BabyMario/BabyMarioWorkCrew.png", name: "Baby Mario Work Crew" },
+            { picture: "./Images/Characters/BabyPeach/BabyPeach.png", name: "Baby Peach" },
+            { picture: "./Images/Characters/BabyPeach/BabyPeachExplorer.png", name: "Baby Peach Explorer" },
+            { picture: "./Images/Characters/BabyPeach/BabyPeachRacer.png", name: "Baby Peach Racer" },
+            { picture: "./Images/Characters/BabyPeach/BabyPeachSailor.png", name: "Baby Peach Sailor" },
+            { picture: "./Images/Characters/BabyPeach/BabyPeachTouring.png", name: "Baby Peach Touring" },
+            { picture: "./Images/Characters/BabyRosalina/BabyRosalina.png", name: "Baby Rosalina" },
+            { picture: "./Images/Characters/BabyRosalina/BabyRosalinaExplorer.png", name: "Baby Rosalina Explorer" },
+            { picture: "./Images/Characters/BabyRosalina/BabyRosalinaProRacer.png", name: "Baby Rosalina Pro Racer" },
+            { picture: "./Images/Characters/BabyRosalina/BabyRosalinaSailor.png", name: "Baby Rosalina Sailor" },
+            { picture: "./Images/Characters/BabyRosalina/BabyRosalinaTouring.png", name: "Baby Rosalina Touring" },
+            { picture: "./Images/Characters/Birdo/Birdo.png", name: "Birdo" },
+            { picture: "./Images/Characters/Birdo/BirdoRacer.png", name: "Birdo Racer" },
+            { picture: "./Images/Characters/Birdo/BirdoVacation.png", name: "Birdo Vacation" },
+            { picture: "./Images/Characters/Bowser/Bowser.png", name: "Bowser" },
+            { picture: "./Images/Characters/Bowser/BowserAllTerrain.png", name: "Bowser All Terrain" },
+            { picture: "./Images/Characters/Bowser/BowserBiker.png", name: "Bowser Biker" },
+            { picture: "./Images/Characters/Bowser/BowserProRacer.png", name: "Bowser Pro Racer" },
+            { picture: "./Images/Characters/Bowser/BowserSupercharged.png", name: "Bowser Supercharged" },
+            { picture: "./Images/Characters/BowserJr/BowserJr.png", name: "Bowser Jr" },
+            { picture: "./Images/Characters/BowserJr/BowserJrBikerJr.png", name: "Bowser Jr Biker Jr" },
+            { picture: "./Images/Characters/BowserJr/BowserJrExplorer.png", name: "Bowser Jr Explorer" },
+            { picture: "./Images/Characters/BowserJr/BowserJrProRacer.png", name: "Bowser Jr Pro Racer" },
+            { picture: "./Images/Characters/Creatures/Cataquack.png", name: "Cataquack" },
+            { picture: "./Images/Characters/Creatures/CharginChuck.png", name: "Chargin Chuck" },
+            { picture: "./Images/Characters/Creatures/CheepCheep.png", name: "Cheep Cheep" },
+            { picture: "./Images/Characters/Creatures/CoinCoffer.png", name: "Coin Coffer" },
+            { picture: "./Images/Characters/Creatures/Conkdor.png", name: "Conkdor" },
+            { picture: "./Images/Characters/Creatures/Cow.png", name: "Cow" },
+            { picture: "./Images/Characters/Creatures/Dolphin.png", name: "Dolphin" },
+            { picture: "./Images/Characters/Creatures/DryBones.png", name: "Dry Bones" },
+            { picture: "./Images/Characters/Creatures/Fishbone.png", name: "Fishbone" },
+            { picture: "./Images/Characters/Creatures/Goomba.png", name: "Goomba" },
+            { picture: "./Images/Characters/Creatures/HammerBro.png", name: "Hammer Bro" },
+            { picture: "./Images/Characters/Creatures/MontyMole.png", name: "Monty Mole" },
+            { picture: "./Images/Characters/Creatures/Nabbit.png", name: "Nabbit" },
+            { picture: "./Images/Characters/Creatures/ParaBiddybud.png", name: "Para Biddybud" },
+            { picture: "./Images/Characters/Creatures/Peepa.png", name: "Peepa" },
+            { picture: "./Images/Characters/Creatures/Penguin.png", name: "Penguin" },
+            { picture: "./Images/Characters/Creatures/Pianta.png", name: "Pianta" },
+            { picture: "./Images/Characters/Creatures/PiranhaPlant.png", name: "Piranha Plant" },
+            { picture: "./Images/Characters/Creatures/Pokey.png", name: "Pokey" },
+            { picture: "./Images/Characters/Creatures/RockyWrench.png", name: "Rocky Wrench" },
+            { picture: "./Images/Characters/Creatures/Sidestepper.png", name: "Sidestepper" },
+            { picture: "./Images/Characters/Creatures/Snowman.png", name: "Snowman" },
+            { picture: "./Images/Characters/Creatures/Spike.png", name: "Spike" },
+            { picture: "./Images/Characters/Creatures/Stingby.png", name: "Stingby" },
+            { picture: "./Images/Characters/Creatures/Swoop.png", name: "Swoop" },
+            { picture: "./Images/Characters/Creatures/Wiggler.png", name: "Wiggler" },
+            { picture: "./Images/Characters/Daisy/Daisy.png", name: "Daisy" },
+            { picture: "./Images/Characters/Daisy/DaisyAero.png", name: "Daisy Aero" },
+            { picture: "./Images/Characters/Daisy/DaisyOasis.png", name: "Daisy Oasis" },
+            { picture: "./Images/Characters/Daisy/DaisyProRacer.png", name: "Daisy Pro Racer" },
+            { picture: "./Images/Characters/Daisy/DaisySwimwear.png", name: "Daisy Swimwear" },
+            { picture: "./Images/Characters/Daisy/DaisyTouring.png", name: "Daisy Touring" },
+            { picture: "./Images/Characters/Daisy/DaisyVacation.png", name: "Daisy Vacation" },
+            { picture: "./Images/Characters/DonkeyKong/DonkeyKong.png", name: "Donkey Kong" },
+            { picture: "./Images/Characters/DonkeyKong/DonkeyKongAllTerrain.png", name: "Donkey Kong All Terrain" },
+            { picture: "./Images/Characters/KingBoo/KingBoo.png", name: "King Boo" },
+            { picture: "./Images/Characters/KingBoo/KingBooAristocrat.png", name: "King Boo Aristocrat" },
+            { picture: "./Images/Characters/KingBoo/KingBooPirate.png", name: "King Boo Pirate" },
+            { picture: "./Images/Characters/KingBoo/KingBooProRacer.png", name: "King Boo Pro Racer" },
+            { picture: "./Images/Characters/KoopaTroopa/Koopa.png", name: "Koopa" },
+            { picture: "./Images/Characters/KoopaTroopa/KoopaTroopaAllTerrain.png", name: "Koopa Troopa All Terrain" },
+            { picture: "./Images/Characters/KoopaTroopa/KoopaTroopaProRacer.png", name: "Koopa Troopa Pro Racer" },
+            { picture: "./Images/Characters/KoopaTroopa/KoopaTroopaRunner.png", name: "Koopa Troopa Runner" },
+            { picture: "./Images/Characters/KoopaTroopa/KoopaTroopaSailor.png", name: "Koopa Troopa Sailor" },
+            { picture: "./Images/Characters/KoopaTroopa/KoopaTroopaWorkCrew.png", name: "Koopa Troopa Work Crew" },
+            { picture: "./Images/Characters/Lakitu/Lakitu.png", name: "Lakitu" },
+            { picture: "./Images/Characters/Lakitu/LakituFisherman.png", name: "Lakitu Fisherman" },
+            { picture: "./Images/Characters/Lakitu/LakituPitCrew.png", name: "Lakitu Pit Crew" },
+            { picture: "./Images/Characters/Luigi/Luigi.png", name: "Luigi" },
+            { picture: "./Images/Characters/Luigi/LuigiAllTerrain.png", name: "Luigi All Terrain" },
+            { picture: "./Images/Characters/Luigi/LuigiFarmer.png", name: "Luigi Farmer" },
+            { picture: "./Images/Characters/Luigi/LuigiGondolier.png", name: "Luigi Gondolier" },
+            { picture: "./Images/Characters/Luigi/LuigiHappi.png", name: "Luigi Happi" },
+            { picture: "./Images/Characters/Luigi/LuigiMechanic.png", name: "Luigi Mechanic" },
+            { picture: "./Images/Characters/Luigi/LuigiOasis.png", name: "Luigi Oasis" },
+            { picture: "./Images/Characters/Luigi/LuigiProRacer.png", name: "Luigi Pro Racer" },
+            { picture: "./Images/Characters/Luigi/LuigiTouring.png", name: "Luigi Touring" },
+            { picture: "./Images/Characters/Mario/Mario.png", name: "Mario" },
+            { picture: "./Images/Characters/Mario/MarioAllTerrain.png", name: "Mario All Terrain" },
+            { picture: "./Images/Characters/Mario/MarioAviator.png", name: "Mario Aviator" },
+            { picture: "./Images/Characters/Mario/MarioCowboy.png", name: "Mario Cowboy" },
+            { picture: "./Images/Characters/Mario/MarioDuneRider.png", name: "Mario Dune Rider" },
+            { picture: "./Images/Characters/Mario/MarioHappi.png", name: "Mario Happi" },
+            { picture: "./Images/Characters/Mario/MarioMechanic.png", name: "Mario Mechanic" },
+            { picture: "./Images/Characters/Mario/MarioProRacer.png", name: "Mario Pro Racer" },
+            { picture: "./Images/Characters/Mario/MarioSightseeing.png", name: "Mario Sightseeing" },
+            { picture: "./Images/Characters/Mario/MarioTouring.png", name: "Mario Touring" },
+            { picture: "./Images/Characters/Pauline/Pauline.png", name: "Pauline" },
+            { picture: "./Images/Characters/Pauline/PaulineAero.png", name: "Pauline Aero" },
+            { picture: "./Images/Characters/Peach/Peach.png", name: "Peach" },
+            { picture: "./Images/Characters/Peach/PeachAero.png", name: "Peach Aero" },
+            { picture: "./Images/Characters/Peach/PeachAviator.png", name: "Peach Aviator" },
+            { picture: "./Images/Characters/Peach/PeachFarmer.png", name: "Peach Farmer" },
+            { picture: "./Images/Characters/Peach/PeachProRacer.png", name: "Peach Pro Racer" },
+            { picture: "./Images/Characters/Peach/PeachSightseeing.png", name: "Peach Sightseeing" },
+            { picture: "./Images/Characters/Peach/PeachTouring.png", name: "Peach Touring" },
+            { picture: "./Images/Characters/Peach/PeachVacation.png", name: "Peach Vacation" },
+            { picture: "./Images/Characters/Peach/PeachYukata.png", name: "Peach Yukata" },
+            { picture: "./Images/Characters/Rosalina/Rosalina.png", name: "Rosalina" },
+            { picture: "./Images/Characters/Rosalina/RosalinaAurora.png", name: "Rosalina Aurora" },
+            { picture: "./Images/Characters/Rosalina/RosalinaBiker.png", name: "Rosalina Biker" },
+            { picture: "./Images/Characters/Rosalina/RosalinaRacer.png", name: "Rosalina Racer" },
+            { picture: "./Images/Characters/Rosalina/RosalinaTouring.png", name: "Rosalina Touring" },
+            { picture: "./Images/Characters/ShyGuy/ShyGuy.png", name: "Shy Guy" },
+            { picture: "./Images/Characters/ShyGuy/ShyGuyRacer.png", name: "Shy Guy Racer" },
+            { picture: "./Images/Characters/ShyGuy/SkyGuySloper.png", name: "Sky Guy Sloper" },
+            { picture: "./Images/Characters/Toad/ToadBurgerBud.png", name: "Toad Burger Bud" },
+            { picture: "./Images/Characters/Toad/ToadEngineer.png", name: "Toad Engineer" },
+            { picture: "./Images/Characters/Toad/ToadExplorer.png", name: "Toad Explorer" },
+            { picture: "./Images/Characters/Toad/Toad.png", name: "Toad" },
+            { picture: "./Images/Characters/Toad/ToadProRacer.png", name: "Toad Pro Racer" },
+            { picture: "./Images/Characters/Toadette/Toadette.png", name: "Toadette" },
+            { picture: "./Images/Characters/Toadette/ToadetteConductor.png", name: "Toadette Conductor" },
+            { picture: "./Images/Characters/Toadette/ToadetteExplorer.png", name: "Toadette Explorer" },
+            { picture: "./Images/Characters/Toadette/ToadetteProRacer.png", name: "Toadette Pro Racer" },
+            { picture: "./Images/Characters/Toadette/ToadetteSoftServer.png", name: "Toadette Soft Server" },
+            { picture: "./Images/Characters/Waluigi/Waluigi.png", name: "Waluigi" },
+            { picture: "./Images/Characters/Waluigi/WaluigiBiker.png", name: "Waluigi Biker" },
+            { picture: "./Images/Characters/Waluigi/WaluigiDuneRacer.png", name: "Waluigi Dune Racer" },
+            { picture: "./Images/Characters/Waluigi/WaluigiMariachi.png", name: "Waluigi Mariachi" },
+            { picture: "./Images/Characters/Waluigi/WaluigiRoadRuffian.png", name: "Waluigi Road Ruffian" },
+            { picture: "./Images/Characters/Waluigi/WaluigiVampire.png", name: "Waluigi Vampire" },
+            { picture: "./Images/Characters/Wario/Wario.png", name: "Wario" },
+            { picture: "./Images/Characters/Wario/WarioBiker.png", name: "Wario Biker" },
+            { picture: "./Images/Characters/Wario/WarioConstruction.png", name: "Wario Construction" },
+            { picture: "./Images/Characters/Wario/WarioOasis.png", name: "Wario Oasis" },
+            { picture: "./Images/Characters/Wario/WarioPirate.png", name: "Wario Pirate" },
+            { picture: "./Images/Characters/Wario/WarioProRacer.png", name: "Wario Pro Racer" },
+            { picture: "./Images/Characters/Wario/WarioRoadRuffian.png", name: "Wario Road Ruffian" },
+            { picture: "./Images/Characters/Wario/WarioWickedWasp.png", name: "Wario Wicked Wasp" },
+            { picture: "./Images/Characters/Yoshi/Yoshi.png", name: "Yoshi" },
+            { picture: "./Images/Characters/Yoshi/YoshiArisocrat.png", name: "Yoshi Arisocrat" },
+            { picture: "./Images/Characters/Yoshi/YoshiBiker.png", name: "Yoshi Biker" },
+            { picture: "./Images/Characters/Yoshi/YoshiFoodSlinger.png", name: "Yoshi Food Slinger" },
+            { picture: "./Images/Characters/Yoshi/YoshiMatsuri.png", name: "Yoshi Matsuri" },
+            { picture: "./Images/Characters/Yoshi/YoshiProRacer.png", name: "Yoshi Pro Racer" },
+            { picture: "./Images/Characters/Yoshi/YoshiSoftServer.png", name: "Yoshi Soft Server" },
+            { picture: "./Images/Characters/Yoshi/YoshiSwimwear.png", name: "Yoshi Swimwear" },
+            { picture: "./Images/Characters/Yoshi/YoshiTouring.png", name: "Yoshi Touring" },
+        ];
+
+        let karts = [
+            { picture: "./Images/Karts/BabyBlooper.png", name: "Baby Blooper" },
+            { picture: "./Images/Karts/BDasher.png", name: "B Dasher" },
+            { picture: "./Images/Karts/Biddybuggy.png", name: "Biddybuggy" },
+            { picture: "./Images/Karts/BigHorn.png", name: "Big Horn" },
+            { picture: "./Images/Karts/Billdozer.png", name: "Billdozer" },
+            { picture: "./Images/Karts/BlastronautIII.png", name: "Blastronaut III" },
+            { picture: "./Images/Karts/BowserBruiser.png", name: "Bowser Bruiser" },
+            { picture: "./Images/Karts/BumbleV.png", name: "Bumble V" },
+            { picture: "./Images/Karts/CarpetFlyer.png", name: "Carpet Flyer" },
+            { picture: "./Images/Karts/CharginTruck.png", name: "Chargin Truck" },
+            { picture: "./Images/Karts/Cloud9.png", name: "Cloud9" },
+            { picture: "./Images/Karts/CuteScoot.png", name: "Cute Scoot" },
+            { picture: "./Images/Karts/DolphinDasher.png", name: "Dolphin Dasher" },
+            { picture: "./Images/Karts/DreadSled.png", name: "Dread Sled" },
+            { picture: "./Images/Karts/FinTwin.png", name: "Fin Twin" },
+            { picture: "./Images/Karts/FunkyDorrie.png", name: "Funky Dorrie" },
+            { picture: "./Images/Karts/HotRod.png", name: "Hot Rod" },
+            { picture: "./Images/Karts/HyperPipe.png", name: "Hyper Pipe" },
+            { picture: "./Images/Karts/JunkyardHog.png", name: "Junkyard Hog" },
+            { picture: "./Images/Karts/LilDumpy.png", name: "Lil Dumpy" },
+            { picture: "./Images/Karts/LobsterRoller.png", name: "Lobster Roller" },
+            { picture: "./Images/Karts/LocoMoto.png", name: "Loco Moto" },
+            { picture: "./Images/Karts/MachRocket.png", name: "Mach Rocket" },
+            { picture: "./Images/Karts/MechaTrike.png", name: "Mecha Trike" },
+            { picture: "./Images/Karts/PipeFrame.png", name: "Pipe Frame" },
+            { picture: "./Images/Karts/Plushbuggy.png", name: "Plushbuggy" },
+            { picture: "./Images/Karts/RallyBike.png", name: "Rally Bike" },
+            { picture: "./Images/Karts/Rallygator.png", name: "Rallygator" },
+            { picture: "./Images/Karts/RallyKart.png", name: "Rally Kart" },
+            { picture: "./Images/Karts/ReelRacer.png", name: "Reel Racer" },
+            { picture: "./Images/Karts/RibbitRevster.png", name: "Ribbit Revster" },
+            { picture: "./Images/Karts/RoadsterRoyale.png", name: "Roadster Royale" },
+            { picture: "./Images/Karts/Robhog.png", name: "ROBHOG" },
+            { picture: "./Images/Karts/StandardBike.png", name: "Standard Bike" },
+            { picture: "./Images/Karts/StandardKart.png", name: "Standard Kart" },
+            { picture: "./Images/Karts/StellarSled.png", name: "Stellar Sled" },
+            { picture: "./Images/Karts/TinyTitan.png", name: "Tiny Titan" },
+            { picture: "./Images/Karts/TuneThumper.png", name: "Tune Thumper" },
+            { picture: "./Images/Karts/W-TwinChopper.png", name: "W-Twin Chopper" },
+            { picture: "./Images/Karts/ZoomBuggy.png", name: "Zoom Buggy" },
+        ];
+
         let players = 1;
         let isGenerating = false;
         let assetsLoaded = false;
 
-        // Function to format filename to display name
-        function formatName(filename) {
-            // Remove file extension
-            const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-            // Add space before capital letters (except the first one)
-            return nameWithoutExt.replace(/([A-Z])/g, ' $1').trim();
-        }
-
-        // Function to scan a directory for image files
-        async function scanDirectory(path) {
-            try {
-                const response = await fetch(path);
-                if (!response.ok) {
-                    throw new Error(`Directory not found: ${path}`);
-                }
-                
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a[href]'));
-                
-                const imageFiles = links
-                    .map(link => link.getAttribute('href'))
-                    .filter(href => /\.(png|jpg|jpeg|gif|webp)$/i.test(href))
-                    .filter(href => !href.startsWith('.') && !href.startsWith('/'));
-                
-                return imageFiles.map(filename => ({
-                    picture: `${path}/${filename}`,
-                    name: formatName(filename)
-                }));
-            } catch (error) {
-                console.warn(`Could not scan directory ${path}:`, error);
-                return [];
-            }
-        }
-
-        // Function to recursively scan directories for characters
-        async function scanCharacterDirectories(basePath = './Images/Characters') {
-            try {
-                const response = await fetch(basePath);
-                if (!response.ok) {
-                    throw new Error(`Directory not found: ${basePath}`);
-                }
-                
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a[href]'));
-                
-                // Get subdirectories
-                const subdirs = links
-                    .map(link => link.getAttribute('href'))
-                    .filter(href => !href.includes('.') && !href.startsWith('.') && href.endsWith('/'))
-                    .map(href => href.slice(0, -1)); // Remove trailing slash
-                
-                let allCharacters = [];
-                
-                // Scan each subdirectory
-                for (const subdir of subdirs) {
-                    const subdirPath = `${basePath}/${subdir}`;
-                    const characterImages = await scanDirectory(subdirPath);
-                    allCharacters = allCharacters.concat(characterImages);
-                }
-                
-                // Also scan the base directory for any direct images
-                const baseImages = await scanDirectory(basePath);
-                allCharacters = allCharacters.concat(baseImages);
-                
-                return allCharacters;
-            } catch (error) {
-                console.warn(`Could not scan character directories:`, error);
-                return [];
-            }
-        }
-
-        // Function to load assets with fallback data
-        async function loadAssets() {
+        function loadAssets() {
             const loadingMessage = document.getElementById('loadingMessage');
             
-            try {
-                loadingMessage.textContent = 'Scanning character folders...';
-                characters = await scanCharacterDirectories('./Images/Characters');
-                
-                loadingMessage.textContent = 'Scanning kart folders...';
-                karts = await scanDirectory('./Images/Karts');
-                
-                // If no assets found, use fallback data
-                if (characters.length === 0) {
-                    console.warn('No characters found, using fallback data');
-                    characters = [
-                        {picture: './Images/Characters/Mario/Mario.png', name: 'Mario'},
-                        {picture: './Images/Characters/Mario/MarioAllTerrain.png', name: 'Mario All Terrain'},
-                        {picture: './Images/Characters/Mario/MarioAviator.png', name: 'Mario Aviator'},
-                    ];
-                }
-                
-                if (karts.length === 0) {
-                    console.warn('No karts found, using fallback data');
-                    karts = [
-                        {picture: './Images/Karts/StandardKart.png', name: 'Standard Kart'},
-                        {picture: './Images/Karts/PipeFrame.png', name: 'Pipe Frame'},
-                        {picture: './Images/Karts/Mach8.png', name: 'Mach 8'},
-                    ];
-                }
-                
-                loadingMessage.textContent = `Loaded ${characters.length} characters and ${karts.length} karts!`;
-                
-                // Enable buttons
-                const generateBtn = document.getElementById('generateBtn');
-                const addPlayerBtn = document.getElementById('addPlayerBtn');
-                
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate';
-                addPlayerBtn.disabled = false;
-                
-                // Update initial slots
-                updateInitialSlots();
-                
-                assetsLoaded = true;
-                
-                setTimeout(() => {
-                    loadingMessage.style.display = 'none';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error loading assets:', error);
-                loadingMessage.textContent = 'Error loading assets. Using fallback data.';
-                loadingMessage.style.color = '#ff6b6b';
-                
-                // Use fallback data
-                characters = [
-                    {picture: './Images/Characters/Mario/Mario.png', name: 'Mario'},
-                    {picture: './Images/Characters/Luigi/Luigi.png', name: 'Luigi'},
-                    {picture: './Images/Characters/Peach/Peach.png', name: 'Peach'},
-                ];
-                karts = [
-                    {picture: './Images/Karts/StandardKart.png', name: 'Standard Kart'},
-                    {picture: './Images/Karts/BabyBlooper.png', name: 'Baby Blooper'},
-                    {picture: './Images/Karts/Mach8.png', name: 'Mach 8'},
-                ];
-                
-                const generateBtn = document.getElementById('generateBtn');
-                const addPlayerBtn = document.getElementById('addPlayerBtn');
-                
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate';
-                addPlayerBtn.disabled = false;
-                
-                updateInitialSlots();
-                assetsLoaded = true;
-            }
+            loadingMessage.textContent = `Loaded ${characters.length} characters and ${karts.length} karts!`;
+
+            const generateBtn = document.getElementById('generateBtn');
+            const addPlayerBtn = document.getElementById('addPlayerBtn');
+            
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate';
+            addPlayerBtn.disabled = false;
+
+            updateInitialSlots();
+            assetsLoaded = true;
+
+            setTimeout(() => {
+                loadingMessage.style.display = 'none';
+            }, 2000);
         }
 
         function updateInitialSlots() {
             const characterSlot = document.querySelector('#character-slot-0 .slot-item');
             const kartSlot = document.querySelector('#kart-slot-0 .slot-item');
-            
+
             if (characters.length > 0) {
                 characterSlot.innerHTML = `
                     <img src="${characters[0].picture}" alt="${characters[0].name}" class="slot-image">
                     <div class="slot-text">${characters[0].name}</div>
                 `;
             }
-            
+
             if (karts.length > 0) {
                 kartSlot.innerHTML = `
                     <img src="${karts[0].picture}" alt="${karts[0].name}" class="slot-image">
@@ -477,11 +552,11 @@
 
         function addPlayer() {
             if (players >= 4 || !assetsLoaded) return;
-            
+
             players++;
             const playersContainer = document.getElementById('playersContainer');
             const playerIndex = players - 1;
-            
+
             const playerDiv = document.createElement('div');
             playerDiv.className = 'player';
             playerDiv.innerHTML = `
@@ -506,24 +581,25 @@
                     </div>
                 </div>
             `;
-            
+
             playersContainer.appendChild(playerDiv);
-            
+
             if (players >= 4) {
-                document.getElementById('addPlayerBtn').disabled = true;
-                document.getElementById('addPlayerBtn').textContent = 'Max Players Reached';
+                const addPlayerBtn = document.getElementById('addPlayerBtn');
+                addPlayerBtn.disabled = true;
+                addPlayerBtn.textContent = 'Max Players Reached';
             }
         }
 
         function spinSlot(slotId, items, duration, finalItem) {
             const slot = document.getElementById(slotId);
             const slotItem = slot.querySelector('.slot-item');
-            
+
             slot.classList.add('spinning');
-            
+
             let spinCount = 0;
             const maxSpins = Math.floor(duration / 100);
-            
+
             const spinInterval = setInterval(() => {
                 const randomItem = items[Math.floor(Math.random() * items.length)];
                 slotItem.innerHTML = `
@@ -531,7 +607,7 @@
                     <div class="slot-text">${randomItem.name}</div>
                 `;
                 spinCount++;
-                
+
                 if (spinCount >= maxSpins) {
                     clearInterval(spinInterval);
                     slot.classList.remove('spinning');
@@ -545,25 +621,36 @@
 
         function generateAll() {
             if (isGenerating || !assetsLoaded) return;
-            
+
             isGenerating = true;
             const generateBtn = document.querySelector('.generate-btn');
+            const trueRandomness = document.getElementById('trueRandomness').checked;
+
             generateBtn.disabled = true;
             generateBtn.textContent = 'Generating...';
-            
+
             for (let i = 0; i < players; i++) {
                 const characterSlotId = `character-slot-${i}`;
                 const kartSlotId = `kart-slot-${i}`;
-                
-                const finalCharacter = characters[Math.floor(Math.random() * characters.length)];
+
+                let finalCharacter;
+                if (trueRandomness) {
+                    // Equal chance for each costume (current behavior)
+                    finalCharacter = characters[Math.floor(Math.random() * characters.length)];
+                } else {
+                    // Equal chance per character -> then random costume
+                    const baseCharacter = characterList[Math.floor(Math.random() * characterList.length)];
+                    const variants = characters.filter(c => c.picture.includes(`/Characters/${baseCharacter}/`));
+                    finalCharacter = variants[Math.floor(Math.random() * variants.length)];
+                }
+
                 const finalKart = karts[Math.floor(Math.random() * karts.length)];
-                
-                const duration = 2000 + Math.random() * 1000; // 2-3 seconds
-                
+                const duration = 2000 + Math.random() * 1000;
+
                 spinSlot(characterSlotId, characters, duration, finalCharacter);
                 spinSlot(kartSlotId, karts, duration, finalKart);
             }
-            
+
             setTimeout(() => {
                 isGenerating = false;
                 generateBtn.disabled = false;
@@ -571,7 +658,7 @@
             }, 3500);
         }
 
-        // Load assets when page loads
+
         window.addEventListener('DOMContentLoaded', loadAssets);
     </script>
 </body>
