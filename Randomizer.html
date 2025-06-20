@@ -251,6 +251,65 @@
                 width: 100px;
                 height: 100px;
             }
+            
+            .info-tooltip {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+                max-width: 200px;
+                white-space: normal;
+                text-align: center;
+            }
+        }
+        .info-icon-container {
+            display: inline-block;
+            position: relative;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .info-icon:hover {
+            opacity: 1;
+        }
+
+        .info-tooltip {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .info-icon-container:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
     </style>
 </head>
@@ -270,6 +329,26 @@
                 <input type="checkbox" id="trueRandomness">
                 True Randomness
             </label>
+            <div class="info-icon-container">
+                <img src="./Images/Media/info.png" alt="Info" class="info-icon">
+                <div class="info-tooltip"><div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Unticked (Default):</strong><br>
+                        Each character has an equal chance of being selected, then a random costume is chosen for that character.
+                    </div>
+                    
+                    <div>
+                        <strong>Ticked (True Randomness):</strong><br>
+                        Every individual costume has an equal chance of being selected.
+                    </div>
+                    
+                    <div style="margin-top: 8px; font-style: italic; color: #666;">
+                        Example: Mario has 10 costumes and Pauline has 2 costumes, Mario would be 5x more likely to be chosen.<br/>
+                        All creatures are considered as 1 character with 26 costume.  
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
         <button class="generate-btn" onclick="generateAll()" id="generateBtn" disabled>Loading...</button>
 
