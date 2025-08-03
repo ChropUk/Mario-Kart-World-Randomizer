@@ -3,6 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Mario Kart World Randomizer - Generate random character and kart combinations for Mario Kart with our fun web tool. Perfect for adding excitement to your racing sessions!">
+    <meta name="keywords" content="Mario Kart, randomizer, character generator, kart generator, Mario Kart World, racing game, Nintendo, random picker">
+    <meta name="author" content="Chrop">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph (Facebook/Social Media) -->
+    <meta property="og:title" content="Mario Kart World Randomizer">
+    <meta property="og:description" content="Generate random character and kart combinations for Mario Kart World. Add excitement to your racing with our randomizer tool!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chropuk.github.io/Mario-Kart-World-Randomizer/Randomizer.html">
+    <meta property="og:image" content="./Images/Karts/BabyBlooper.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://chropuk.github.io">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Mario Kart World Randomizer",
+            "description": "Generate random character and kart combinations for Mario Kart World",
+            "url": "https://chropuk.github.io/Mario-Kart-World-Randomizer/Randomizer.html",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Web Browser",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "GBP"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "Chrop"
+            }
+        }
+    </script>
     <title>Mario Kart World Randomizer</title>
     <style>
         * {
@@ -225,41 +260,7 @@
             transform: none;
         }
 
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.4rem;
-            }
-            
-            .description {
-                font-size: 1rem;
-            }
-            
-            .combination {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .plus-icon {
-                transform: rotate(90deg);
-            }
-            
-            .slot-container {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .info-tooltip {
-                font-size: 0.8rem;
-                padding: 6px 10px;
-                max-width: 200px;
-                white-space: normal;
-                text-align: center;
-            }
-        }
+        
         .info-icon-container {
             display: inline-block;
             position: relative;
@@ -311,9 +312,266 @@
             opacity: 1;
             visibility: visible;
         }
+
+        .course-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .course-container {
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .course-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .course-description {
+            font-size: 1.1rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .course-generate-btn {
+            background: linear-gradient(45deg, #9B59B6, #8E44AD);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .course-generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .course-generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .course-generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .course-display {
+            width: 300px;
+            height: 240px;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f9f9f9;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .course-slot {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-item {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease;
+        }
+
+        .course-image {
+            width: 90%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+
+        .course-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .course-slot.spinning .course-item {
+            animation: courseSpin 0.1s linear infinite;
+        }
+        .seo-content {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .author-ad {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .author-text {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin: 0;
+        }
+
+        .author-button {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .author-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,1);
+        }
+
+        .youtube-icon {
+            width: 18px;
+            height: 18px;
+            fill: #FF0000;
+        }
+
+        @keyframes courseSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+            
+            .combination {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .plus-icon {
+                transform: rotate(90deg);
+            }
+            
+            .slot-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .info-tooltip {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+                max-width: 200px;
+                white-space: normal;
+                text-align: center;
+            }
+
+            
+            .course-display {
+                width: 250px;
+                height: 170px;
+            }
+            
+            .course-title {
+                font-size: 1.6rem;
+            }
+            
+            .course-description {
+                font-size: 1rem;
+            }
+
+            .author-ad {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .author-text {
+                font-size: 0.8rem;
+            }
+            
+            .author-button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .youtube-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- SEO Content - Hidden but accessible -->
+    <div class="seo-content">
+        <h1>Mario Kart World Character and Kart Randomizer</h1>
+        <p>The ultimate Mario Kart World randomizer tool! Generate random character and kart combinations featuring all your favorite Mario Kart characters including Mario, Luigi, Peach, Bowser, Yoshi, and many more. Perfect for Mario Kart World players looking to spice up their racing experience with unexpected character-kart combinations.</p>
+        <p>Features include random character selection from Baby Mario, Baby Luigi, Mario, Luigi, Peach, Daisy, Rosalina, Bowser, Bowser Jr, Yoshi, Koopa Troopa, Shy Guy, Lakitu, Toad, Toadette, King Boo, and many costume variants. Kart selection includes Standard Kart, Pipe Frame, Mach Rocket, Baby Blooper, and dozens more vehicles.</p>
+    </div>
+
+    <!-- Your existing content starts here -->
+    <div class="container">
+        <!-- rest of your existing code -->
     <div class="container">
         <div class="header">
             <h1 class="title">Mario Kart World Randomizer</h1>
@@ -378,6 +636,23 @@
         </div>
 
         <button class="add-player-btn" onclick="addPlayer()" id="addPlayerBtn" disabled>+ Add Player</button>
+
+        <div class="course-section">
+            <h2 class="course-title">Random Course</h2>
+            <p class="course-description">Click "Generate" to choose a random course.</p>
+            
+            <div class="course-container">
+                <button class="course-generate-btn" onclick="generateCourse()" id="courseGenerateBtn">Generate</button>
+                
+                <div class="course-display">
+                    <div class="course-slot" id="course-slot">
+                        <div class="course-item">
+                            <img src="./Images/Courses/AcornHeights.png" alt="Course 1" class="course-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <audio id="itemBoxSound" src="./sounds/ItemBox.mp3" preload="auto"></audio>
 
@@ -743,8 +1018,101 @@
             }, 3500);
         }
 
+        let courses = [
+            { picture: "./Images/Courses/AcornHeights.png", name: "AcornHeights" },
+            { picture: "./Images/Courses/AirshipFortress.png", name: "AirshipFortress" },
+            { picture: "./Images/Courses/BooCinema.png", name: "BooCinema" },
+            { picture: "./Images/Courses/BowsersCastle.png", name: "BowsersCastle" },
+            { picture: "./Images/Courses/CheepCheepFalls.png", name: "CheepCheepFalls" },
+            { picture: "./Images/Courses/ChocoMountain.png", name: "ChocoMountain" },
+            { picture: "./Images/Courses/CrownCity.png", name: "CrownCity" },
+            { picture: "./Images/Courses/DandelionDepths.png", name: "DandelionDepths" },
+            { picture: "./Images/Courses/DesertHills.png", name: "DesertHills" },
+            { picture: "./Images/Courses/DinoDinoJungle.png", name: "DinoDinoJungle" },
+            { picture: "./Images/Courses/DKPass.png", name: "DKPass" },
+            { picture: "./Images/Courses/DKSpaceport.png", name: "DKSpaceport" },
+            { picture: "./Images/Courses/DryBonesBurnout.png", name: "DryBonesBurnout" },
+            { picture: "./Images/Courses/FarawayOasis.png", name: "FarawayOasis" },
+            { picture: "./Images/Courses/GreatBlockRuins.png", name: "GreatBlockRuins" },
+            { picture: "./Images/Courses/KoopaTroopaBeach.png", name: "KoopaTroopaBeach" },
+            { picture: "./Images/Courses/MarioBrosCircuit.png", name: "MarioBrosCircuit" },
+            { picture: "./Images/Courses/MarioCircuit.png", name: "MarioCircuit" },
+            { picture: "./Images/Courses/MooMooMeadows.png", name: "MooMooMeadows" },
+            { picture: "./Images/Courses/PeachBeach.png", name: "PeachBeach" },
+            { picture: "./Images/Courses/PeachStadium.png", name: "PeachStadium" },
+            { picture: "./Images/Courses/RainbowRoad.png", name: "RainbowRoad" },
+            { picture: "./Images/Courses/SaltySaltySpeedway.png", name: "SaltySaltySpeedway" },
+            { picture: "./Images/Courses/ShyGuyBazaar.png", name: "ShyGuyBazaar" },
+            { picture: "./Images/Courses/SkyHighSundae.png", name: "SkyHighSundae" },
+            { picture: "./Images/Courses/StarviewPeak.png", name: "StarviewPeak" },
+            { picture: "./Images/Courses/ToadsFactory.png", name: "ToadsFactory" },
+            { picture: "./Images/Courses/WariosGalleon.png", name: "WariosGalleon" },
+            { picture: "./Images/Courses/WarioStadium.png", name: "WarioStadium" },
+            { picture: "./Images/Courses/WhistlestopSummit.png", name: "WhistlestopSummit" },
+        ];
+
+        let isCourseGenerating = false;
+
+        function spinCourseSlot(duration, finalCourse) {
+            const slot = document.getElementById('course-slot');
+            const courseItem = slot.querySelector('.course-item');
+
+            slot.classList.add('spinning');
+
+            let spinCount = 0;
+            const maxSpins = Math.floor(duration / 100);
+
+            const spinInterval = setInterval(() => {
+                const randomCourse = courses[Math.floor(Math.random() * courses.length)];
+                courseItem.innerHTML = `
+                    <img src="${randomCourse.picture}" alt="${randomCourse.name}" class="course-image">
+                `;
+                spinCount++;
+
+                if (spinCount >= maxSpins) {
+                    clearInterval(spinInterval);
+                    slot.classList.remove('spinning');
+                    courseItem.innerHTML = `
+                        <img src="${finalCourse.picture}" alt="${finalCourse.name}" class="course-image">
+                    `;
+                }
+            }, 100);
+        }
+
+        function generateCourse() {
+            if (isCourseGenerating) return;
+            document.getElementById('itemBoxSound').play(); // Play the same sound effect
+
+            isCourseGenerating = true;
+            const generateBtn = document.getElementById('courseGenerateBtn');
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            const finalCourse = courses[Math.floor(Math.random() * courses.length)];
+            const duration = 2800;
+
+            spinCourseSlot(duration, finalCourse);
+
+            setTimeout(() => {
+                isCourseGenerating = false;
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate';
+            }, 3500);
+        }
+
 
         window.addEventListener('DOMContentLoaded', loadAssets);
     </script>
+    <!-- Author Credit -->
+    <div class="author-ad">
+        <span class="author-text">Author -</span>
+        <a href="https://youtube.com/@ChropMK" target="_blank" rel="noopener noreferrer" class="author-button">
+            <svg class="youtube-icon" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            Chrop
+        </a>
+    </div>
 </body>
 </html>
